@@ -18,6 +18,10 @@ server.on('connection', (client) => {
         server.emit('load', DB);
     }
 
+    const sendTodo = (todo) => {
+        server.emit('newTodo', todo);
+    }
+
     // Accepts when a client makes a new todo
     client.on('make', (t) => {
         // Make a new todo
@@ -28,7 +32,7 @@ server.on('connection', (client) => {
 
         // Send the latest todos to the client
         // FIXME: This sends all todos every time, could this be more efficient?
-        reloadTodos();
+        sendTodo(t);
     });
 
     // Send the DB downstream on connect
