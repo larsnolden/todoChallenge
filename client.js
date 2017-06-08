@@ -16,7 +16,6 @@ function add() {
     // TODO: refocus the element
 }
 
-
 //render single Todo
 function render(todo) {
     console.log(todo);
@@ -26,9 +25,15 @@ function render(todo) {
     list.append(listItem);
 }
 
+function clean() {
+    list.innerHTML = '';
+}
+
 // NOTE: These are listeners for events from the server
 // This event is for (re)loading the entire list of todos from the server
 server.on('load', (todos) => {
+    clean()
+    console.log(`received new set of todos: ${JSON.stringify(todos)}`)
     todos.forEach((todo) => render(todo));
 });
 
