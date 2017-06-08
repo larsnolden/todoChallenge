@@ -8,9 +8,9 @@ server.on('connection', (client) => {
 
     // FIXME: DB is reloading on client refresh. It should be persistent on new client
     // connections from the last time the server was run...
-    const DB = firstTodos.map((t) => {
+    var DB = firstTodos.map((t) => {
         // Form new Todo objects
-        return new Todo(title=t.title);
+        return new Todo(title = t.title);
     });
 
     // Sends a message to the client to reload all todos
@@ -21,7 +21,7 @@ server.on('connection', (client) => {
     // Accepts when a client makes a new todo
     client.on('make', (t) => {
         // Make a new todo
-        const newTodo = new Todo(title=t.title);
+        const newTodo = new Todo(title = t.title);
 
         // Push this newly created todo to our database
         DB.push(newTodo);
