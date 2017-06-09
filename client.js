@@ -64,22 +64,27 @@ function send_AddTodo() {
 //emmit remove todo to server
 function send_RemoveTodo(todo) {
     server.emit('removeTodo', todo)
+    input.focus();
 }
 
 //emmit a complete todo to server
 function send_CompleteTodo(todo) {
     server.emit('completeTodo', todo)
+    input.focus();
 }
 
 //emit remove all todos to server
 function send_RemoveAll() {
     server.emit('removeAll')
+    input.focus();
 }
 
 //emit complete all todos to server
 function send_CompleteAll() {
     server.emit('completeAll')
+    input.focus();
 }
+
 
 //--functions to modify the list locally
 
@@ -98,7 +103,7 @@ function addTodo(todo) {
     listItem.appendChild(completeButton);
 
     //render done todos correclty
-    if (todo.done) console.log(listItem.classList.add('done'))
+    if (todo.done) listItem.classList.add('done')
     list.append(listItem);
 }
 
