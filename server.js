@@ -11,33 +11,41 @@ var DB = firstTodos.map((t) => {
 
 server.on('connection', (client) => {
 
-    // Sends a message to the client to reload all todos
+    // Sends a message to the client:
+    // - to reload all Todos
     const reloadTodos = () => {
         server.emit('load', DB);
     }
 
-    const sendAddTodo = (todo) => {
+    // - to add a Todo
+    const send_AddTodo = (todo) => {
         server.emit('addTodo', todo);
     }
 
-    const sendRemoveTodo = (todo) => {
+    // - to remove a Todos
+    const send_RemoveTodo = (todo) => {
         server.emit('removeTodo', todo)
     }
 
-    const sendCompleteToggle = (todo) => {
-        server.emit('completeToggleTodo', todo)
+    // - to complete a Todos
+    const send_CompleteTodo = (todo) => {
+        server.emit('completeTodo', todo)
     }
 
-    const sendRemoveAll = () => {
-        server.emit('removeAllTodos')
+    // - to remove all Todos
+    const send_RemoveAll = () => {
+        server.emit('removeAll')
     }
 
-    const sendToggleCompleteAll = () => {
-        server.emit('toggleCompleteAllTodos')
+    // - to complete all Todos
+    const send_CompleteAll = () => {
+        server.emit('completeAll')
     }
 
-    // Accepts when a client makes a new todo
-    client.on('make', (t) => {
+
+    // Accepts when: 
+    // - a client adds a Todo
+    client.on('addTodo', (t) => {
         console.log(`add todo: ${JSON.stringify(t)}`);
         // Make a new todo
         const newTodo = new Todo(title = t.title);
@@ -47,17 +55,18 @@ server.on('connection', (client) => {
 
         // Send the latest todos to the client
         // FIXME: This sends all todos every time, could this be more efficient?
-        sendAddTodo(t);
+        send_AddTodo(t);
     });
 
-    //Accepts when a client removes a new todo
-    client.on('remove', (t) => {
+    // - a client removes a Todo
+    client.on('removeTodo', (t) => {
         console.log(`removed todo: ${JSON.stringify(t)}`);
         DB = DB.filter((todo) => (t.title != todo.title))
-        sendRemoveTodo(t)
+        send_RemoveTodo(t)
     })
 
-    client.on('completeToggle', (t) => {
+    // - a client completes a Todo
+    client.on('completeTodo', (t) => {
         console.log(`completed todo: ${JSON.stringify(t)}`)
         DB = DB.map((todo) => {
             if (t.title == todo.title) {
@@ -67,20 +76,22 @@ server.on('connection', (client) => {
             else return todo
         })
 
-        sendCompleteToggle(t)
+        send_CompleteTodo(t)
     })
 
+    // - a client removes all Todos
     client.on('removeAll', () => {
         DB = []
         console.log(`DB: ${JSON.stringify(DB)}`)
-        sendRemoveAll()
+        send_RemoveAll()
     })
 
-    client.on('toggleCompleteAll', () => {
+    // - a client completes all Todos
+    client.on('completeAll', () => {
         //lazy for each
         DB.forEach((todo) => todo.done = true)
         console.log(`DB: ${JSON.stringify(DB)}`)
-        sendToggleCompleteAll();
+        send_CompleteAll();
     })
 
     // Send the DB downstream on connect

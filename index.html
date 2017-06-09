@@ -14,14 +14,14 @@
     <div class="todo-wrapper">
         <div class="todo-input">
             <input id="todo-input" type="text" placeholder="Feed the cat" autofocus>
-            <button type="button" onclick="add()">Make</button>
+            <button type="button" onclick="send_AddTodo()">Make</button>
         </div>
         <div class="todo-list">
             <h1>Todos:</h1>
             <ul id="todo-list"></ul>
             <div class="todo-list-buttons">
-                <button type="button" class="remove-btn" onclick="removeAll()">delete All</button>
-                <button type="button" class="complete-btn" onclick="toggleCompleteAll()">complete All</button>
+                <button type="button" class="remove-btn" onclick="send_RemoveAll()">delete All</button>
+                <button type="button" class="complete-btn" onclick="send_CompleteAll()">complete All</button>
             </div>
         </div>
     </div>

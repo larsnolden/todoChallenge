@@ -4,7 +4,7 @@ const input = document.getElementById('todo-input');
 
 //on hit enter add todo
 input.addEventListener('keypress', (event) => {
-    if (event.keyCode === 13) add()
+    if (event.keyCode === 13) send_AddTodo()
 })
 
 //render from localStorage on connection Error
@@ -17,17 +17,17 @@ server.on('load', (todos) => {
 });
 
 server.on('addTodo', (todo) => {
-    render(todo);
+    addTodo(todo);
     localStorage.todos = toLocal(fromLocal(localStorage).push(todo));
 });
 
 server.on('removeTodo', (todo) => {
-    clean(todo);
+    removeTodo(todo);
     localStorage.todos = toLocal(fromLocal(localStorage).filter((t) => (t != todo)));
 });
 
-server.on('completeToggleTodo', (todo) => {
-    completeToggleTodo(todo);
+server.on('completeTodo', (todo) => {
+    completeTodo(todo);
     localStorage.todos = toLocal(fromLocal(localStorage).map((t) => {
         if (t = todo) {
             t.done = !t.done
@@ -37,23 +37,21 @@ server.on('completeToggleTodo', (todo) => {
     }))
 })
 
-server.on('removeAllTodos', () => {
-    cleanAll()
+server.on('removeAll', () => {
+    removeAll()
 })
 
-server.on('toggleCompleteAllTodos', () => {
-    toggleCompleteAllTodos();
+server.on('completeAll', () => {
+    completeAll();
 })
 
 //--emitter to signalise changes to the server
 
 //emit new todo to server
-function add() {
-    console.warn(event);
-
+function send_AddTodo() {
     //only submit todos with content
     if (input.value) {
-        server.emit('make', {
+        server.emit('addTodo', {
             title: input.value
         });
     }
@@ -64,39 +62,39 @@ function add() {
 }
 
 //emmit remove todo to server
-function remove(todo) {
-    server.emit('remove', todo)
+function send_RemoveTodo(todo) {
+    server.emit('removeTodo', todo)
 }
 
 //emmit a complete todo to server
-function completeToggle(todo) {
-    server.emit('completeToggle', todo)
+function send_CompleteTodo(todo) {
+    server.emit('completeTodo', todo)
 }
 
 //emit remove all todos to server
-function removeAll() {
+function send_RemoveAll() {
     server.emit('removeAll')
 }
 
 //emit complete all todos to server
-function toggleCompleteAll() {
-    server.emit('toggleCompleteAll')
+function send_CompleteAll() {
+    server.emit('completeAll')
 }
 
 //--functions to modify the list locally
 
 //render single Todo
-function render(todo) {
+function addTodo(todo) {
     const listItem = document.createElement('li');
     const listItemText = document.createTextNode(todo.title);
     listItem.appendChild(listItemText);
 
     //add remove button
-    let removeButton = Button('fi-trash', 'remove-btn', () => remove(todo))
+    let removeButton = Button('fi-trash', 'remove-btn', () => send_RemoveTodo(todo))
     listItem.appendChild(removeButton);
 
     //add complete button
-    let completeButton = Button('fi-check', 'complete-btn', () => completeToggle(todo))
+    let completeButton = Button('fi-check', 'complete-btn', () => send_CompleteTodo(todo))
     listItem.appendChild(completeButton);
 
     //render done todos correclty
@@ -105,7 +103,7 @@ function render(todo) {
 }
 
 //remove specific todo
-function clean(todo) {
+function removeTodo(todo) {
     if (list) {
         for (let child of list.childNodes) {
             if (child.firstChild.data == todo.title) list.removeChild(child)
@@ -114,7 +112,7 @@ function clean(todo) {
 }
 
 //toogle complete on single Todo
-function completeToggleTodo(todo) {
+function completeTodo(todo) {
     if (list) {
         for (let child of list.childNodes) {
             if (child.firstChild.data == todo.title) child.classList.toggle('done')
@@ -122,7 +120,8 @@ function completeToggleTodo(todo) {
     }
 }
 
-function toggleCompleteAllTodos() {
+//mark all Todos as complete
+function completeAll() {
     if (list) {
         for (let child of list.childNodes) {
             child.classList.add('done')
@@ -130,14 +129,14 @@ function toggleCompleteAllTodos() {
     }
 }
 
-//render Todos
+//render all Todos
 function renderAll(todos) {
-    cleanAll()
-    todos.forEach((todo) => render(todo))
+    removeAll()
+    todos.forEach((todo) => addTodo(todo))
 }
 
-//remmove all todos
-function cleanAll() {
+//remmove all Todos
+function removeAll() {
     list.innerHTML = '';
 }
 
