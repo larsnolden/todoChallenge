@@ -92,28 +92,16 @@ function render(todo) {
     listItem.appendChild(listItemText);
 
     //add remove button
-    let removeButton = button('remove', 'remove-btn', () => remove(todo))
+    let removeButton = Button('fi-trash', 'remove-btn', () => remove(todo))
     listItem.appendChild(removeButton);
 
     //add complete button
-    let completeButton = button('complete', 'complete-btn', () => completeToggle(todo))
+    let completeButton = Button('fi-check', 'complete-btn', () => completeToggle(todo))
     listItem.appendChild(completeButton);
 
     //render done todos correclty
     if (todo.done) console.log(listItem.classList.add('done'))
     list.append(listItem);
-}
-
-//button creator
-//make module
-function button(title, className, onClick) {
-    let button = document.createElement('button');
-    let buttonText = document.createTextNode(title);
-    button.appendChild(buttonText)
-    button.setAttribute("class", className);
-    button.addEventListener('click', onClick)
-
-    return button
 }
 
 //remove specific todo
