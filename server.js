@@ -19,12 +19,17 @@ server.on('connection', (client) => {
         server.emit('load', DB);
     }
 
-    const sendTodo = (todo) => {
-        server.emit('newTodo', todo);
+    const sendAddTodo = (todo) => {
+        server.emit('addTodo', todo);
+    }
+
+    const sendRemoveTodo = (todo) => {
+        server.emit('removeTodo', todo)
     }
 
     // Accepts when a client makes a new todo
     client.on('make', (t) => {
+        console.log(`add todo: ${JSON.stringify(t)}`);
         // Make a new todo
         const newTodo = new Todo(title = t.title);
 
@@ -33,8 +38,15 @@ server.on('connection', (client) => {
 
         // Send the latest todos to the client
         // FIXME: This sends all todos every time, could this be more efficient?
-        sendTodo(t);
+        sendAddTodo(t);
     });
+
+    //Accepts when a client removes a new todo
+    client.on('remove', (t) => {
+        console.log(`removed todo: ${JSON.stringify(t)}`);
+        DB = DB.filter((todo) => (t.title != todo.title))
+        sendRemoveTodo(t)
+    })
 
     // Send the DB downstream on connect
     reloadTodos();

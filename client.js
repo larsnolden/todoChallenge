@@ -2,8 +2,8 @@ const server = io('http://localhost:3003/');
 const list = document.getElementById('todo-list');
 const input = document.getElementById('todo-input');
 
+//on hit enter add todo
 input.addEventListener('keypress', (event) => {
-    //on hit enter
     if (event.keyCode === 13) add()
 })
 
@@ -16,15 +16,19 @@ server.on('load', (todos) => {
     localStorage.todos = toLocal(todos)
 });
 
-server.on('newTodo', (todo) => {
+server.on('addTodo', (todo) => {
     render(todo)
     localStorage.todos = toLocal(fromLocal(localStorage).push(todo));
+});
+
+server.on('removeTodo', (todo) => {
+    clean(todo)
+    localStorage.todos = toLocal(fromLocal(localStorage).filter((t) => (t != todo)));
 });
 
 //emit new todo to server
 function add() {
     console.warn(event);
-    // Emit the new todo as some data to the server
 
     //only submit todos with content
     if (input.value) {
@@ -40,8 +44,6 @@ function add() {
 
 //emmit remove todo to server
 function remove(todo) {
-    console.warn(event);
-    clean(todo);
     server.emit('remove', todo)
 }
 
@@ -56,7 +58,7 @@ function render(todo) {
     const buttonText = document.createTextNode('remove');
     button.appendChild(buttonText)
     button.setAttribute("class", "remove-btn");
-    button.addEventListener('click', () => clean(todo))
+    button.addEventListener('click', () => remove(todo))
     listItem.appendChild(button);
 
     list.append(listItem);
