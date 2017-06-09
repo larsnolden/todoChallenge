@@ -11,6 +11,9 @@
 <body>
     <input id="todo-input" type="text" placeholder="Feed the cat" autofocus>
     <button type="button" onclick="add()">Make</button>
+    <div><button type="button" onclick="removeAll()">remove all</button>
+        <button type="button" onclick="toggleCompleteAll()">complete all</button>
+    </div>
     <ul id="todo-list"></ul>
 </body>
 <script src="client.js" async></script>

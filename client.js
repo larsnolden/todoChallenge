@@ -10,8 +10,7 @@ input.addEventListener('keypress', (event) => {
 //render from localStorage on connection Error
 server.addEventListener('connect_error', () => renderAll(fromLocal(localStorage.todos)))
 
-// NOTE: These are listeners for events from the server
-// This event is for (re)loading the entire list of todos from the server
+//--listeners for events from the server
 server.on('load', (todos) => {
     renderAll(todos);
     localStorage.todos = toLocal(todos);
@@ -38,6 +37,12 @@ server.on('completeToggleTodo', (todo) => {
     }))
 })
 
+server.on('removeAllTodos', () => {
+    cleanAll()
+})
+
+//--emitter to signalise changes to the server
+
 //emit new todo to server
 function add() {
     console.warn(event);
@@ -59,9 +64,22 @@ function remove(todo) {
     server.emit('remove', todo)
 }
 
+//emmit a complete todo to server
 function completeToggle(todo) {
     server.emit('completeToggle', todo)
 }
+
+//emit remove all todos to server
+function removeAll() {
+    server.emit('removeAll', {})
+}
+
+//emit complete all todos to server
+function toggleCompleteAll() {
+    server.emit('toggleCompleteAll')
+}
+
+//--functions to modify the list locally
 
 //render single Todo
 function render(todo) {
@@ -83,6 +101,7 @@ function render(todo) {
 }
 
 //button creator
+//make module
 function button(title, className, onClick) {
     let button = document.createElement('button');
     let buttonText = document.createTextNode(title);
@@ -93,6 +112,7 @@ function button(title, className, onClick) {
     return button
 }
 
+//remove specific todo
 function clean(todo) {
     if (list) {
         for (let child of list.childNodes) {
@@ -101,7 +121,7 @@ function clean(todo) {
     }
 }
 
-//toogle single Todo
+//toogle complete on single Todo
 function completeToggleTodo(todo) {
     if (list) {
         for (let child of list.childNodes) {
@@ -116,6 +136,7 @@ function renderAll(todos) {
     todos.forEach((todo) => render(todo))
 }
 
+//remmove all todos
 function cleanAll() {
     list.innerHTML = '';
 }
@@ -125,6 +146,7 @@ function toLocal(value) {
     return JSON.stringify(value)
 }
 
+//helper to retrieve object from local storage
 function fromLocal(string) {
     return JSON.parse(string)
 }
