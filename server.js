@@ -35,6 +35,10 @@ server.on('connection', (client) => {
         server.emit('removeAllTodos')
     }
 
+    const sendToggleCompleteAll = () => {
+        server.emit('toggleCompleteAllTodos')
+    }
+
     // Accepts when a client makes a new todo
     client.on('make', (t) => {
         console.log(`add todo: ${JSON.stringify(t)}`);
@@ -69,11 +73,17 @@ server.on('connection', (client) => {
         sendCompleteToggle(t)
     })
 
-    client.on('removeAll', (t) => {
-        console.log(`delete all Todos ${t}`)
+    client.on('removeAll', () => {
         DB = []
         console.log(`DB: ${JSON.stringify(DB)}`)
         sendRemoveAll()
+    })
+
+    client.on('toggleCompleteAll', () => {
+        //lazy for each
+        DB.forEach((todo) => todo.done = true)
+        console.log(`DB: ${JSON.stringify(DB)}`)
+        sendToggleCompleteAll();
     })
 
     // Send the DB downstream on connect

@@ -41,6 +41,10 @@ server.on('removeAllTodos', () => {
     cleanAll()
 })
 
+server.on('toggleCompleteAllTodos', () => {
+    toggleCompleteAllTodos();
+})
+
 //--emitter to signalise changes to the server
 
 //emit new todo to server
@@ -71,7 +75,7 @@ function completeToggle(todo) {
 
 //emit remove all todos to server
 function removeAll() {
-    server.emit('removeAll', {})
+    server.emit('removeAll')
 }
 
 //emit complete all todos to server
@@ -126,6 +130,14 @@ function completeToggleTodo(todo) {
     if (list) {
         for (let child of list.childNodes) {
             if (child.firstChild.data == todo.title) child.classList.toggle('done')
+        }
+    }
+}
+
+function toggleCompleteAllTodos() {
+    if (list) {
+        for (let child of list.childNodes) {
+            child.classList.add('done')
         }
     }
 }
