@@ -38,21 +38,45 @@ function add() {
     // TODO: refocus the element
 }
 
+//emmit remove todo to server
+function remove(todo) {
+    console.warn(event);
+    clean(todo);
+    server.emit('remove', todo)
+}
+
 //render single Todo
 function render(todo) {
     const listItem = document.createElement('li');
     const listItemText = document.createTextNode(todo.title);
     listItem.appendChild(listItemText);
+
+    //add button
+    const button = document.createElement('button');
+    const buttonText = document.createTextNode('remove');
+    button.appendChild(buttonText)
+    button.setAttribute("class", "remove-btn");
+    button.addEventListener('click', () => clean(todo))
+    listItem.appendChild(button);
+
     list.append(listItem);
+}
+
+function clean(todo) {
+    if (list) {
+        for (let child of list.childNodes) {
+            if (child.firstChild.data == todo.title) list.removeChild(child)
+        }
+    }
 }
 
 //render Todos
 function renderAll(todos) {
-    cleanTodos()
-    todos.forEach((todo) => render(todo));
+    cleanAll()
+    todos.forEach((todo) => render(todo))
 }
 
-function cleanTodos() {
+function cleanAll() {
     list.innerHTML = '';
 }
 
