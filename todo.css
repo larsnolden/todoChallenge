@@ -1,3 +1,103 @@
+body {
+  background: #3a4e82;
+}
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+*:focus {
+  outline: none
+}
+
+button {
+  border: none;
+}
+
+.todo-wrapper {
+  width: 500px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.todo-input {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  background: #f7f7f7;
+  height: auto;
+}
+
+.todo-input input {
+  font-size: 22px;
+  flex-basis: 450px;
+}
+
+.todo-input button {
+  flex-basis: 50px;
+  padding: 10px;
+  font-size: 15px;
+  background: #005ec4;
+  color: #fff;
+  font-weight: 200;
+}
+
+.todo-list {
+  margin-top: 20px;
+  background: #f7f7f7;
+  border-radius: 2px;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,1);
+}
+
+.todo-list-buttons {
+  margin: 10px 0 10px 0;  
+}
+
+.todo-list-buttons button {
+  padding: 5px;
+  font-size: 15px;
+  color: #fff;
+  font-weight: 200;
+  border-radius: 2px;
+}
+
+.remove-btn {
+  background: #e20012
+}
+
+.complete-btn {
+  background: #00e287
+}
+
+.todo-list {
+  padding: 20px;
+}
+
+.todo-list h1 {
+  margin: 0
+}
+
+.todo-list ul {
+  padding-left: 10px;
+  list-style: none;
+}
+
+.todo-list li {
+  margin: 15px 0 10px 0;
+  border-bottom: 1px solid #adadad;
+}
+
+.todo-list li button {
+  float: right;
+   padding: 5px;
+  font-size: 15px;
+  color: #fff;
+}
+
 .done{
   text-decoration: line-through;
 }
