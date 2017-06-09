@@ -60,7 +60,7 @@ function add() {
 
     // Clear the input
     input.value = '';
-    // TODO: refocus the element
+    input.focus();
 }
 
 //emmit remove todo to server
